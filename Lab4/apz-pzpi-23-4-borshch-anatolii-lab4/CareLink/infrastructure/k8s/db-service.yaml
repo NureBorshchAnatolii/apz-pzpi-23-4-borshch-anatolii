@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: __DB_SERVICE__
+  namespace: __NAMESPACE__
+spec:
+  selector:
+    app: __DB_DEPLOYMENT__
+  ports:
+    - protocol: TCP
+      port: 1433
+      targetPort: 1433
+  type: ClusterIP

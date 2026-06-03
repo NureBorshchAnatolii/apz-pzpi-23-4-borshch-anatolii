@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: __API_DEPLOYMENT__
+  namespace: __NAMESPACE__
+spec:
+  replicas: __API_REPLICAS__
+  selector:
+    matchLabels:
+      app: __API_DEPLOYMENT__
+  template:
+    metadata:
+      labels:
+        app: __API_DEPLOYMENT__
+    spec:
+      containers:
+        - name: api
+          image: __API_IMAGE__
+          ports:
+            - containerPort: 8080
+          env:
+            - name: ASPNETCORE_URLS
+              value: "http://+:8080"
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Production"
+            - name: ConnectionStrings__DefaultConnection
+              valueFrom:
+                secretKeyRef:
+                  name: __DB_SECRET__
+                  key: CONNECTION_STRING
+          readinessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 20
