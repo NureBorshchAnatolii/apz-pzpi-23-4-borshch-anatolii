@@ -31,7 +31,7 @@ builder.Services.AddBearerSecurityScheme();
 
 const string DevCors = "DevCors";
 builder.Services.AddCors(o => o.AddPolicy(DevCors, p => p
-    .SetIsOriginAllowed(_ => true)
+    .WithOrigins("http://localhost:5174", "http://127.0.0.1:5174")
     .AllowAnyHeader()
     .AllowAnyMethod()
     .AllowCredentials()));
@@ -99,6 +99,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.UseHttpsRedirection();
 
 await app.RunAsync();
